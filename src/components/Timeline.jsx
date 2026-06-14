@@ -56,6 +56,26 @@ export default function Timeline({
   const scrollRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
   const [collapsed, setCollapsed] = useState({});
+  const [panMode, setPanMode] = useState(false);
+  const panOrigin = useRef(null); // { x, scrollLeft } when drag starts
+
+  const handlePointerDown = useCallback((e) => {
+    if (!panMode) return;
+    if (e.button !== 0) return;
+    e.preventDefault();
+    scrollRef.current.setPointerCapture(e.pointerId);
+    panOrigin.current = { x: e.clientX, scrollLeft: scrollRef.current.scrollLeft };
+  }, [panMode]);
+
+  const handlePointerMove = useCallback((e) => {
+    if (!panMode || !panOrigin.current) return;
+    const dx = e.clientX - panOrigin.current.x;
+    scrollRef.current.scrollLeft = panOrigin.current.scrollLeft - dx;
+  }, [panMode]);
+
+  const handlePointerUp = useCallback(() => {
+    panOrigin.current = null;
+  }, []);
 
   const pxPerDay = zoom * 3;
   const totalWidth = WAR_DAYS * pxPerDay + 260;
@@ -117,6 +137,16 @@ export default function Timeline({
 
         <div className="controls-sep" />
 
+        <button
+          className={`zoom-btn pan-btn${panMode ? ' active' : ''}`}
+          onClick={() => setPanMode(m => !m)}
+          title={panMode ? 'Pan mode ON — click to switch back to select' : 'Pan mode — drag to scroll'}
+        >
+          {panMode ? '✋' : '🖐'}
+        </button>
+
+        <div className="controls-sep" />
+
         <div className="phase-legend">
           {PHASES.map((p, i) => (
             <button key={p.id} className="phase-chip" onClick={() => onJumpToPhase(p)}>
@@ -128,7 +158,14 @@ export default function Timeline({
       </div>
 
       {/* Scrollable canvas */}
-      <div className="timeline-scroll" ref={scrollRef}>
+      <div
+        className={`timeline-scroll${panMode ? ' pan-active' : ''}`}
+        ref={scrollRef}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+      >
         <div className="timeline-canvas" style={{ width: totalWidth }}>
 
           {/* Axis */}

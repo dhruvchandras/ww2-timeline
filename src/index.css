@@ -212,6 +212,7 @@ button { font-family: inherit; font-size: inherit; cursor: pointer; border: none
 
 .zoom-btn:hover { border-color: var(--accent-dim); color: var(--accent); }
 .zoom-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.pan-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
 .zoom-level { font-size: 11px; color: var(--text-dim); min-width: 30px; text-align: center; }
 .controls-sep { width: 1px; height: 16px; background: var(--border); margin: 0 4px; }
 
@@ -232,7 +233,9 @@ button { font-family: inherit; font-size: inherit; cursor: pointer; border: none
 .phase-chip-dot { width: 7px; height: 7px; border-radius: 2px; }
 
 /* ── Timeline scroll ────── */
-.timeline-scroll { flex: 1; overflow-x: auto; overflow-y: auto; position: relative; }
+.timeline-scroll { flex: 1; overflow-x: auto; overflow-y: auto; position: relative; cursor: default; }
+.timeline-scroll.pan-active { cursor: grab; user-select: none; }
+.timeline-scroll.pan-active:active { cursor: grabbing; }
 .timeline-canvas { position: relative; min-height: 100%; }
 
 /* Axis */
