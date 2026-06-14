@@ -26,12 +26,12 @@ export const CATEGORIES = {
 };
 
 export const CATEGORY_META = {
-  military:   { label: 'Military Operations', icon: '⚔️'  },
+  military:   { label: 'Land Campaigns',        icon: '⚔️'  },
+  naval:      { label: 'Naval Campaigns',        icon: '⚓'  },
+  air:        { label: 'Air Campaigns',          icon: '✈️'  },
   political:  { label: 'Political / Diplomatic', icon: '🏛️' },
-  naval:      { label: 'Naval',               icon: '⚓'  },
-  air:        { label: 'Air Campaigns',        icon: '✈️'  },
+  technology: { label: 'Technology / Weapons',   icon: '🔬' },
   atrocity:   { label: 'Atrocities / Holocaust', icon: '☠️' },
-  technology: { label: 'Technology / Weapons', icon: '🔬' },
 };
 
 export const SCALES = {
