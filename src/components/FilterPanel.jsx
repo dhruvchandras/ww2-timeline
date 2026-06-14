@@ -7,16 +7,39 @@ const PERSPECTIVES = [
   { key: 'neutral', label: 'Neutral / Both'},
 ];
 
+const ALL_THEATERS    = Object.keys(THEATER_META);
+const ALL_CATEGORIES  = Object.keys(CATEGORY_META);
+const ALL_SCALES      = Object.keys(SCALE_META);
+const ALL_PERSPECTIVES = PERSPECTIVES.map(p => p.key);
+
 function dayToDate(day) {
   const d = new Date(WAR_START.getTime() + day * 86400000);
   return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 }
 
+function SelectAllNone({ allKeys, activeSet, onSetAll, onSetNone }) {
+  const allOn  = allKeys.every(k => activeSet.has(k));
+  const allOff = allKeys.every(k => !activeSet.has(k));
+  return (
+    <div className="select-all-none">
+      <button
+        className={`san-btn${allOn ? ' san-active' : ''}`}
+        onClick={() => onSetAll(new Set(allKeys))}
+      >all</button>
+      <span className="san-sep">·</span>
+      <button
+        className={`san-btn${allOff ? ' san-active' : ''}`}
+        onClick={() => onSetNone(new Set())}
+      >none</button>
+    </div>
+  );
+}
+
 export default function FilterPanel({
-  theaters, onToggleTheater,
-  categories, onToggleCategory,
-  scales, onToggleScale,
-  perspectives, onTogglePerspective,
+  theaters,    onToggleTheater,    onSetTheaters,
+  categories,  onToggleCategory,   onSetCategories,
+  scales,      onToggleScale,      onSetScales,
+  perspectives,onTogglePerspective,onSetPerspectives,
   dateRange, onDateRange,
   warDays,
   onReset,
@@ -56,7 +79,15 @@ export default function FilterPanel({
 
       {/* Theaters */}
       <div className="filter-section">
-        <div className="filter-section-title">Theater</div>
+        <div className="filter-section-header">
+          <div className="filter-section-title">Theater</div>
+          <SelectAllNone
+            allKeys={ALL_THEATERS}
+            activeSet={theaters}
+            onSetAll={onSetTheaters}
+            onSetNone={onSetTheaters}
+          />
+        </div>
         {Object.entries(THEATER_META).map(([key, meta]) => (
           <div
             key={key}
@@ -72,7 +103,15 @@ export default function FilterPanel({
 
       {/* Categories */}
       <div className="filter-section">
-        <div className="filter-section-title">Category</div>
+        <div className="filter-section-header">
+          <div className="filter-section-title">Category</div>
+          <SelectAllNone
+            allKeys={ALL_CATEGORIES}
+            activeSet={categories}
+            onSetAll={onSetCategories}
+            onSetNone={onSetCategories}
+          />
+        </div>
         {Object.entries(CATEGORY_META).map(([key, meta]) => (
           <div
             key={key}
@@ -88,7 +127,15 @@ export default function FilterPanel({
 
       {/* Scale */}
       <div className="filter-section">
-        <div className="filter-section-title">Scale</div>
+        <div className="filter-section-header">
+          <div className="filter-section-title">Scale</div>
+          <SelectAllNone
+            allKeys={ALL_SCALES}
+            activeSet={scales}
+            onSetAll={onSetScales}
+            onSetNone={onSetScales}
+          />
+        </div>
         <div className="scale-buttons">
           {Object.entries(SCALE_META).map(([key, meta]) => (
             <button
@@ -105,7 +152,15 @@ export default function FilterPanel({
 
       {/* Perspective */}
       <div className="filter-section">
-        <div className="filter-section-title">Perspective</div>
+        <div className="filter-section-header">
+          <div className="filter-section-title">Perspective</div>
+          <SelectAllNone
+            allKeys={ALL_PERSPECTIVES}
+            activeSet={perspectives}
+            onSetAll={onSetPerspectives}
+            onSetNone={onSetPerspectives}
+          />
+        </div>
         {PERSPECTIVES.map(({ key, label }) => (
           <div
             key={key}
@@ -127,10 +182,7 @@ export default function FilterPanel({
         </div>
         <div className="dual-slider">
           <div className="slider-track-bg">
-            <div
-              className="slider-track-fill"
-              style={{ left: fillLeft, right: fillRight }}
-            />
+            <div className="slider-track-fill" style={{ left: fillLeft, right: fillRight }} />
           </div>
           <input type="range" min={0} max={warDays} value={dateRange[0]} onChange={handleStart} style={{ zIndex: dateRange[0] > warDays - 100 ? 5 : 3 }} />
           <input type="range" min={0} max={warDays} value={dateRange[1]} onChange={handleEnd} style={{ zIndex: 4 }} />

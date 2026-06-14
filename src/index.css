@@ -92,7 +92,39 @@ button { font-family: inherit; font-size: inherit; cursor: pointer; border: none
 .filter-panel-toggle:hover { color: var(--text); }
 
 .filter-section { padding: 10px; border-bottom: 1px solid var(--border-soft); flex-shrink: 0; }
-.filter-section-title { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 7px; }
+
+.filter-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 7px;
+}
+
+.filter-section-title { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); }
+/* standalone title (date range) still needs bottom margin */
+.filter-section > .filter-section-title { margin-bottom: 7px; }
+
+.select-all-none {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.san-btn {
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  padding: 1px 4px;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  transition: all 0.12s;
+  text-transform: lowercase;
+}
+
+.san-btn:hover { color: var(--text-dim); border-color: var(--border-soft); }
+.san-btn.san-active { color: var(--accent); border-color: var(--accent-dim); }
+
+.san-sep { font-size: 9px; color: var(--text-faint); }
 
 .filter-toggle-row {
   display: flex;

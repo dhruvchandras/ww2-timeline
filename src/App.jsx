@@ -75,10 +75,10 @@ export default function App() {
 
       <div className="app-body">
         <FilterPanel
-          theaters={theaters} onToggleTheater={k => toggleSet(setTheaters, k)}
-          categories={categories} onToggleCategory={k => toggleSet(setCategories, k)}
-          scales={scales} onToggleScale={k => toggleSet(setScales, k)}
-          perspectives={perspectives} onTogglePerspective={k => toggleSet(setPerspectives, k)}
+          theaters={theaters} onToggleTheater={k => toggleSet(setTheaters, k)} onSetTheaters={setTheaters}
+          categories={categories} onToggleCategory={k => toggleSet(setCategories, k)} onSetCategories={setCategories}
+          scales={scales} onToggleScale={k => toggleSet(setScales, k)} onSetScales={setScales}
+          perspectives={perspectives} onTogglePerspective={k => toggleSet(setPerspectives, k)} onSetPerspectives={setPerspectives}
           dateRange={dateRange} onDateRange={setDateRange}
           warDays={WAR_DAYS}
           onReset={reset}
