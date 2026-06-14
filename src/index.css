@@ -328,13 +328,11 @@ button { font-family: inherit; font-size: inherit; cursor: pointer; border: none
 /* ── Event pins (dot + label) ─── */
 .event-pin {
   position: absolute;
-  top: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  top: 0;
+  bottom: 0;
+  width: 0;          /* zero-width anchor; dot/label use negative margins */
   cursor: pointer;
   z-index: 5;
-  /* label can overflow horizontally — don't clip */
 }
 
 .event-pin:hover { z-index: 8; }
@@ -360,19 +358,18 @@ button { font-family: inherit; font-size: inherit; cursor: pointer; border: none
 .dot-icon { font-size: 7px; line-height: 1; pointer-events: none; user-select: none; }
 
 .event-label {
-  margin-top: 4px;
   font-size: 9.5px;
   line-height: 1.25;
   white-space: nowrap;
   pointer-events: none;
   user-select: none;
   opacity: 0.75;
-  /* subtle dark backdrop so labels don't bleed into each other */
   text-shadow: 0 0 6px #13130c, 0 0 4px #13130c, 0 0 3px #13130c;
   max-width: 130px;
   overflow: hidden;
   text-overflow: ellipsis;
   letter-spacing: 0.01em;
+  transform: translateX(-50%);  /* centre label on the dot's x */
 }
 
 /* Event duration bar */
