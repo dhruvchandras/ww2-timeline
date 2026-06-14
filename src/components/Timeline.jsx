@@ -56,25 +56,32 @@ export default function Timeline({
   const scrollRef = useRef(null);
   const [tooltip, setTooltip] = useState(null);
   const [collapsed, setCollapsed] = useState({});
-  const [panMode, setPanMode] = useState(false);
-  const panOrigin = useRef(null); // { x, scrollLeft } when drag starts
+  const [panMode, setPanMode] = useState(true);
+  const panOrigin  = useRef(null);  // { x, scrollLeft }
+  const isDragging = useRef(false); // true once pointer moves past threshold
 
   const handlePointerDown = useCallback((e) => {
-    if (!panMode) return;
-    if (e.button !== 0) return;
-    e.preventDefault();
-    scrollRef.current.setPointerCapture(e.pointerId);
-    panOrigin.current = { x: e.clientX, scrollLeft: scrollRef.current.scrollLeft };
+    if (!panMode || e.button !== 0) return;
+    panOrigin.current  = { x: e.clientX, scrollLeft: scrollRef.current.scrollLeft };
+    isDragging.current = false;
   }, [panMode]);
 
   const handlePointerMove = useCallback((e) => {
     if (!panMode || !panOrigin.current) return;
     const dx = e.clientX - panOrigin.current.x;
-    scrollRef.current.scrollLeft = panOrigin.current.scrollLeft - dx;
+    if (!isDragging.current && Math.abs(dx) > 5) {
+      isDragging.current = true;
+      // Only capture the pointer once we're sure it's a drag, not a click
+      scrollRef.current.setPointerCapture(e.pointerId);
+    }
+    if (isDragging.current) {
+      scrollRef.current.scrollLeft = panOrigin.current.scrollLeft - dx;
+    }
   }, [panMode]);
 
   const handlePointerUp = useCallback(() => {
-    panOrigin.current = null;
+    panOrigin.current  = null;
+    isDragging.current = false;
   }, []);
 
   const pxPerDay = zoom * 3;
